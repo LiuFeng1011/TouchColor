@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ResultLayerManager : InGameUIBaseLayer {
 
-    public UILabel scoreLabel;
+    public UILabel scoreLabel,bestLabel;
 
     public static int playCount = 0;
     public static float lastPlayerTime = 0;
@@ -20,11 +20,7 @@ public class ResultLayerManager : InGameUIBaseLayer {
         scoreLabel = transform.Find("scores").GetComponent<UILabel>();
 
 
-        int selmodel = PlayerPrefs.GetInt(GameConst.USERDATANAME_MODEL, 0);
-        int bestscores = PlayerPrefs.GetInt(GameConst.USERDATANAME_MODEL_MAXSCORES + selmodel);
-
-        UILabel bestLabel = transform.Find("Best").GetComponent<UILabel>();
-        bestLabel.text = "Best:"+bestscores;
+        bestLabel = transform.Find("Best").GetComponent<UILabel>();
     }
 
 	// Use this for initialization
@@ -44,6 +40,12 @@ public class ResultLayerManager : InGameUIBaseLayer {
         gameObject.SetActive(true);
 
         playCount++;
+
+
+        int selmodel = PlayerPrefs.GetInt(GameConst.USERDATANAME_MODEL, 0);
+        int bestscores = PlayerPrefs.GetInt(GameConst.USERDATANAME_MODEL_MAXSCORES + selmodel);
+        bestLabel.text = "Best:" + bestscores;
+
 
         if(InGameManager.gameTime - lastPlayerTime > 30 && playCount > 3 && ADManager.GetInstance().isAdLoaded){
             playCount = 0;

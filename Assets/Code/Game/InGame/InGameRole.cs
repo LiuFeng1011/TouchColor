@@ -19,6 +19,8 @@ public class InGameRole : InGameBaseObj {
         buffManager = new BuffManager();
         buffManager.Init();
 
+        m = transform.Find("icon").GetComponent<Renderer>().material;
+
     }
     // Use this for initialization
     void Start () {
@@ -42,6 +44,7 @@ public class InGameRole : InGameBaseObj {
         GameObject effect = Resources.Load("Prefabs/Effect/RoleDieEffect") as GameObject;
         effect = Instantiate(effect);
         effect.transform.position = transform.position;
+
     }
 
     public override void HandleEvent(EventData resp)
@@ -55,7 +58,7 @@ public class InGameRole : InGameBaseObj {
                 //Fire(GameCommon.ScreenPositionToWorld(eve.pos));
                 Vector3 pos = GameCommon.ScreenPositionToWorld(InGameManager.GetInstance().gamecamera,eve.pos);
 
-                if(pos.x < 0){
+                if(pos.x > 0){
                     KillObj();
                 }else{
                     if(GetMyState() == GameObjState.red){
@@ -70,6 +73,14 @@ public class InGameRole : InGameBaseObj {
 
     }
 
+
+    public void AddScores(int score,InGameBaseObj source)
+    {
+        scores += score;
+        InGameManager.GetInstance().inGameUIManager.AddScores(source.transform.position, score, scores, true);
+
+    }
+
     void KillObj(){
         List<InGameBaseObj> objlist = InGameManager.GetInstance().inGameLevelManager.objList;
 
@@ -80,10 +91,17 @@ public class InGameRole : InGameBaseObj {
                 continue;
             }
 
-            if(Mathf.Abs(transform.position.y - obj.transform.position.y) < obj.transform.localScale.x){
+            if(Mathf.Abs(transform.position.y - obj.transform.position.y) < obj.transform.localScale.x / 2){
+
+                if(obj.GetMyState() != GetMyState()){
+                    InGameManager.GetInstance().GameOver();
+                    return;
+                }
 
                 obj.SetDie();
                 killcount++;
+                AddScores(1,obj);
+
             }
 
         }
@@ -91,6 +109,12 @@ public class InGameRole : InGameBaseObj {
             InGameManager.GetInstance().GameOver();
         }
 
+        if(GetMyState() == GameObjState.black){
+            (new EventCreateEffect(60010010, null, transform.position, 1.0f)).Send();
+        }else if (GetMyState() == GameObjState.white)
+        {
+            (new EventCreateEffect(60010011, null, transform.position, 1.0f)).Send();
+        }
 
     }
 
