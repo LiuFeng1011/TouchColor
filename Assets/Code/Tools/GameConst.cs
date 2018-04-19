@@ -77,6 +77,7 @@ public static class GameConst  {
     public const string USERDATANAME_MODEL = "model";
     public const string USERDATANAME_MODEL_MAXSCORES = "model_maxscores_";
     public const string USERDATANAME_MODEL_LASTSCORES = "model_lastscores_";
+    public const string USERDATANAME_COMBO_COUNT = "combocount";
 
     public const float JUMP_FORCE = 3f;
 

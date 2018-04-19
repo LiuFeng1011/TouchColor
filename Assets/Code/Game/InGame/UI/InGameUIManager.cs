@@ -7,7 +7,7 @@ public class InGameUIManager : BaseGameObject {
     ResultLayerManager  resultLayerManager;
     ReviveLayerManager  reviveLayerManager;
     WinLayerManager winLayerManager;
-    GamePadManager      gamePadManager;
+    public GamePadManager      gamePadManager;
 
     GameObject uiroot,addScoresLabelRes,addScoresComboLabelRes;
     Camera uicamera;
@@ -83,19 +83,21 @@ public class InGameUIManager : BaseGameObject {
 
         if(createLabel){
             GameObject labelObj ;
+            Vector3 pos = GameCommon.WorldPosToNGUIPos(Camera.main, UICamera.currentCamera, worldPos);
             if(iscombo){
                 labelObj = NGUITools.AddChild(uiroot, addScoresComboLabelRes);
+                AddScoresComboLabel label = labelObj.GetComponent<AddScoresComboLabel>();
+                label.Init(pos, scores);
+                label.transform.position = pos;
             }else {
                 labelObj = NGUITools.AddChild(uiroot, addScoresLabelRes);
+                AddScoresLabel label = labelObj.GetComponent<AddScoresLabel>();
+                label.Init(pos, scores);
+                label.transform.position = pos;
             }
             //GameObject labelObj = MonoBehaviour.Instantiate(addScoresLabelRes);
-            AddScoresLabel label = labelObj.GetComponent<AddScoresLabel>();
-            Vector3 pos = GameCommon.WorldPosToNGUIPos(Camera.main, UICamera.currentCamera, worldPos);
-            Debug.Log(pos);
-            label.Init(pos, scores);
-            label.transform.position = pos;
         }
 
-        gamePadManager.SetScores(sumscores);
+        gamePadManager.SetScores(sumscores,iscombo);
     }
 }

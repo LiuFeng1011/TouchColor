@@ -10,7 +10,7 @@ public class InGameManager : MonoBehaviour {
     GameTouchController gameTouchController;
     public InGameLevelManager inGameLevelManager;
     public InGameUIManager inGameUIManager;
-    public InGameBgColor inGameBgColor;
+    public InGameColorManager inGameColorManager;
 
     public GameEffectManager gameEffectManager;
 
@@ -32,7 +32,7 @@ public class InGameManager : MonoBehaviour {
 
     Rect gameRect;
 
-    [HideInInspector] public float gameSpeed = 3,gameScale = 0f, maxSpeed = 5,aloneGameTime = 0,maxSpeedTime = 180;
+    [HideInInspector] public float gameSpeed = 4,gameScale = 0f, maxSpeed = 5,aloneGameTime = 0,maxSpeedTime = 180;
 
     public static InGameManager GetInstance(){
         return instance;
@@ -74,12 +74,10 @@ public class InGameManager : MonoBehaviour {
         roleObj = Instantiate(roleObj);
         role = roleObj.GetComponent<InGameRole>();
 
-        roleObj.transform.position = new Vector3(0,GetGameRect().y + 3,0);
+        roleObj.transform.position = new Vector3(0,GetGameRect().y + 5,0);
 
         gameEffectManager = new GameEffectManager();
 
-        inGameBgColor = new InGameBgColor();
-        inGameBgColor.Init();
         //
         inGameLevelManager = new InGameLevelManager();
         inGameLevelManager.Init();
@@ -90,6 +88,9 @@ public class InGameManager : MonoBehaviour {
         int selmodel = PlayerPrefs.GetInt(GameConst.USERDATANAME_MODEL, 0);
         modelManager = InGameBaseModel.Create(selmodel);
         modelManager.Init();
+
+        inGameColorManager = new InGameColorManager();
+        inGameColorManager.Init();
 
         gameState = enGameState.playing;
 
@@ -107,12 +108,12 @@ public class InGameManager : MonoBehaviour {
         aloneGameTime += Time.deltaTime;
 
         gameScale = Mathf.Min(1, aloneGameTime / maxSpeedTime);
-        gameSpeed = 3 + maxSpeed * gameScale;
+        gameSpeed = 4 + maxSpeed * gameScale;
 
         if (gameTouchController != null) gameTouchController.Update();
         if (inGameLevelManager != null)inGameLevelManager.Update();
         if (modelManager != null) modelManager.Update();
-        if (inGameBgColor != null) inGameBgColor.Update();
+        if (inGameColorManager != null) inGameColorManager.Update();
 
         if (role != null) role.RoleUpdate();
 	}
@@ -123,7 +124,7 @@ public class InGameManager : MonoBehaviour {
         if (inGameLevelManager != null) inGameLevelManager.Destroy();
         if (inGameUIManager != null) inGameUIManager.Destroy();
         if (modelManager != null) modelManager.Destroy();
-        if (inGameBgColor != null) inGameBgColor.Destroy();
+        if (inGameColorManager != null) inGameColorManager.Destroy();
         if (gameEffectManager != null) gameEffectManager.Destroy();
 
     }

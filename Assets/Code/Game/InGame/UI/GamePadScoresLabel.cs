@@ -57,4 +57,8 @@ public class GamePadScoresLabel : MonoBehaviour {
         toTargetTime = 1.0f;
     }
 
+    public void SetColor(Color c){
+        scoreslabel.color = c;
+    }
+
 }

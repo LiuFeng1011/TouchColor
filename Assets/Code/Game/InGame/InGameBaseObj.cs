@@ -14,7 +14,18 @@ public class InGameBaseObj : MSBaseObject {
 
     protected Material m;
 
+    float colorAction = 0f,colorMaxAction = 0.5f;
+    Color targetColor = Color.white,lastColor = Color.white;
+
     bool isdie = false;
+
+    public override void ObjUpdate(){
+        if (colorAction <= 0) return;
+
+        colorAction -= Time.deltaTime;
+        if (colorAction < 0) colorAction = 0;
+        m.color = Color.Lerp(targetColor,lastColor, colorAction / colorMaxAction);
+    }
 
     public virtual void SetDie(){
         isdie = true;
@@ -36,8 +47,11 @@ public class InGameBaseObj : MSBaseObject {
     public void SetState(GameObjState state){
         mystate = state;
         if(m != null){
-            if(state == GameObjState.black) m.color = new Color(0, 0, 0);
-            else m.color = new Color(1, 1, 1);
+            lastColor = targetColor;
+            if(state == GameObjState.black) targetColor = new Color(0,0,0);
+            else targetColor = new Color(1, 1, 1);
+            colorAction = colorMaxAction;
+            Debug.Log(targetColor);
         }
     }
 }

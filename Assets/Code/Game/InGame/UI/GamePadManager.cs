@@ -4,12 +4,17 @@ using UnityEngine;
 
 public class GamePadManager : InGameUIBaseLayer {
 
-    GamePadScoresLabel scoreslabel;
+    public GamePadScoresLabel scoreslabel;
+    public GamePadScoresLabel combolabel;
+
+    int combocount = 0;
     public override void Init()
     {
         base.Init();
         scoreslabel = transform.Find("scores").Find("Label").GetComponent<GamePadScoresLabel>();
-
+        combolabel = transform.Find("TopLeft").Find("ComboIcon").Find("CountLabel").GetComponent<GamePadScoresLabel>();
+        combocount = PlayerPrefs.GetInt(GameConst.USERDATANAME_COMBO_COUNT, 0);
+        combolabel.SetScores(combocount);
     }
 	// Use this for initialization
 	void Start () {
@@ -22,9 +27,14 @@ public class GamePadManager : InGameUIBaseLayer {
        
 	}
 
-    public void SetScores(int val)
+    public void SetScores(int val,bool isCombo)
     {
         scoreslabel.SetScores(val);
+        if(isCombo){
+            combocount++;
+            PlayerPrefs.SetInt(GameConst.USERDATANAME_COMBO_COUNT, combocount);
+            combolabel.SetScores(combocount);
+        }
     }
 
 }

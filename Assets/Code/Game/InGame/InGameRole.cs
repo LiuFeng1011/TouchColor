@@ -8,8 +8,6 @@ public class InGameRole : InGameBaseObj {
 
     public BuffManager buffManager;
 
-    TrailRenderer trail;
-
     private void Awake()
     {
         EventManager.Register(this,
@@ -21,6 +19,7 @@ public class InGameRole : InGameBaseObj {
 
         m = transform.Find("icon").GetComponent<Renderer>().material;
 
+        SetState(GameObjState.white);
     }
     // Use this for initialization
     void Start () {
@@ -29,6 +28,7 @@ public class InGameRole : InGameBaseObj {
 	
 	// Update is called once per frame
 	public void RoleUpdate () {
+        base.ObjUpdate();
         if (!gameObject.activeSelf) return;
 
  
@@ -87,7 +87,7 @@ public class InGameRole : InGameBaseObj {
         }
 
         InGameManager.GetInstance().inGameUIManager.AddScores(source.transform.position, s, scores,iscombo, true);
-
+        InGameManager.GetInstance().inGameColorManager.SetColor((float)score * (iscombo ? 1f * ((float)combo * 0.3f) : 0.1f  ));
     }
 
     void KillObj(){

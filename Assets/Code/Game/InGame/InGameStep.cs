@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class InGameStep : InGameBaseObj {
 
+
 	public override void Init()
     {
         base.Init();
@@ -18,7 +19,10 @@ public class InGameStep : InGameBaseObj {
 	public override void ObjUpdate()
     {
         base.ObjUpdate();
+
         transform.position -= new Vector3(0, Time.deltaTime*InGameManager.GetInstance().gameSpeed, 0);
+
+
     }
 
     public override void Die()
