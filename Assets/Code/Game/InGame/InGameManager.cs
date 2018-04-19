@@ -32,7 +32,7 @@ public class InGameManager : MonoBehaviour {
 
     Rect gameRect;
 
-    public float gameSpeed = 2,gameScale = 0f, maxSpeed = 9,aloneGameTime = 0,maxSpeedTime = 60;
+    [HideInInspector] public float gameSpeed = 3,gameScale = 0f, maxSpeed = 5,aloneGameTime = 0,maxSpeedTime = 180;
 
     public static InGameManager GetInstance(){
         return instance;
@@ -107,7 +107,7 @@ public class InGameManager : MonoBehaviour {
         aloneGameTime += Time.deltaTime;
 
         gameScale = Mathf.Min(1, aloneGameTime / maxSpeedTime);
-        gameSpeed = 2 + maxSpeed * gameScale;
+        gameSpeed = 3 + maxSpeed * gameScale;
 
         if (gameTouchController != null) gameTouchController.Update();
         if (inGameLevelManager != null)inGameLevelManager.Update();

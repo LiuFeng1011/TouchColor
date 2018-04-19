@@ -9,7 +9,7 @@ public class InGameUIManager : BaseGameObject {
     WinLayerManager winLayerManager;
     GamePadManager      gamePadManager;
 
-    GameObject uiroot,addScoresLabelRes;
+    GameObject uiroot,addScoresLabelRes,addScoresComboLabelRes;
     Camera uicamera;
 
     public void Init()
@@ -31,6 +31,7 @@ public class InGameUIManager : BaseGameObject {
         gamePadManager.gameObject.SetActive(true);
 
         addScoresLabelRes = Resources.Load("Prefabs/UI/AddScoresLabel") as GameObject;
+        addScoresComboLabelRes = Resources.Load("Prefabs/UI/AddScoresComboLabel") as GameObject;
 
         uicamera = uiroot.transform.Find("Camera").GetComponent<Camera>();
     }
@@ -78,10 +79,15 @@ public class InGameUIManager : BaseGameObject {
         gamePadManager.Show();
     }
 
-    public void AddScores(Vector3 worldPos, int scores, int sumscores, bool createLabel = true){
+    public void AddScores(Vector3 worldPos, int scores, int sumscores,bool iscombo, bool createLabel = true){
 
         if(createLabel){
-            GameObject labelObj = NGUITools.AddChild(uiroot, addScoresLabelRes);
+            GameObject labelObj ;
+            if(iscombo){
+                labelObj = NGUITools.AddChild(uiroot, addScoresComboLabelRes);
+            }else {
+                labelObj = NGUITools.AddChild(uiroot, addScoresLabelRes);
+            }
             //GameObject labelObj = MonoBehaviour.Instantiate(addScoresLabelRes);
             AddScoresLabel label = labelObj.GetComponent<AddScoresLabel>();
             Vector3 pos = GameCommon.WorldPosToNGUIPos(Camera.main, UICamera.currentCamera, worldPos);

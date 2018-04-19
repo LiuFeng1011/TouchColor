@@ -74,10 +74,19 @@ public class InGameRole : InGameBaseObj {
     }
 
 
-    public void AddScores(int score,InGameBaseObj source)
+    public void AddScores(int score,bool iscombo,InGameBaseObj source)
     {
-        scores += score;
-        InGameManager.GetInstance().inGameUIManager.AddScores(source.transform.position, score, scores, true);
+        int s = score;
+        if(iscombo){
+            combo++;
+            scores += combo;
+            s = combo;
+        }else {
+            combo = 0;
+            scores += score;
+        }
+
+        InGameManager.GetInstance().inGameUIManager.AddScores(source.transform.position, s, scores,iscombo, true);
 
     }
 
@@ -85,13 +94,14 @@ public class InGameRole : InGameBaseObj {
         List<InGameBaseObj> objlist = InGameManager.GetInstance().inGameLevelManager.objList;
 
         int killcount = 0;
+        bool iscombo = false;
         for (int i = 0; i < objlist.Count; i ++){
             InGameBaseObj obj = objlist[i];
             if(obj.myObjType == InGameBaseObj.ObjType.role){
                 continue;
             }
-
-            if(Mathf.Abs(transform.position.y - obj.transform.position.y) < obj.transform.localScale.x / 2){
+            float dis = Mathf.Abs(transform.position.y - obj.transform.position.y);
+            if(dis < obj.transform.localScale.x / 2){
 
                 if(obj.GetMyState() != GetMyState()){
                     InGameManager.GetInstance().GameOver();
@@ -100,7 +110,14 @@ public class InGameRole : InGameBaseObj {
 
                 obj.SetDie();
                 killcount++;
-                AddScores(1,obj);
+                bool c = dis < 0.2f;
+                AddScores(1, c,obj);
+
+                if(c){
+                    (new EventCreateEffect(60010014, null, obj.transform.position, 1)).Send();
+                }
+
+                iscombo = iscombo | c;
 
             }
 
@@ -109,11 +126,17 @@ public class InGameRole : InGameBaseObj {
             InGameManager.GetInstance().GameOver();
         }
 
+        float effectscale = 2f;
+
+        if(iscombo){
+            effectscale = 6;
+        }
+
         if(GetMyState() == GameObjState.black){
-            (new EventCreateEffect(60010010, null, transform.position, 1.0f)).Send();
+            (new EventCreateEffect(60010010, null, transform.position, effectscale)).Send();
         }else if (GetMyState() == GameObjState.white)
         {
-            (new EventCreateEffect(60010011, null, transform.position, 1.0f)).Send();
+            (new EventCreateEffect(60010011, null, transform.position, effectscale)).Send();
         }
 
     }
