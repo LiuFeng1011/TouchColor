@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using LitJson;
 public class InGameRole : InGameBaseObj {
 
     public int combo = 0,scores = 0;
@@ -49,7 +49,9 @@ public class InGameRole : InGameBaseObj {
 
     public override void HandleEvent(EventData resp)
     {
-
+        if(InGameManager.GetInstance().gameState != enGameState.playing){
+            return;
+        }
         switch (resp.eid)
         {
             case EventID.EVENT_TOUCH_DOWN:
@@ -115,6 +117,21 @@ public class InGameRole : InGameBaseObj {
 
                 if(c){
                     (new EventCreateEffect(60010014, null, obj.transform.position, 1)).Send();
+
+                    //combo fly obj
+                    Vector3[] ps = {
+                        obj.transform.position,
+                        new Vector3(0,obj.transform.position.y + obj.transform.position.x /*Random.Range(8f,15f)*/,0),
+                        InGameManager.GetInstance().inGameUIManager.gamePadManager.comboLabelPos -
+                        new Vector3(0,Random.Range(8f,15f),0),
+                        InGameManager.GetInstance().inGameUIManager.gamePadManager.comboLabelPos
+                    };
+                    Debug.Log(ps[0]);
+                    Debug.Log(ps[1]);
+                    Debug.Log(ps[2]);
+                    Debug.Log(ps[3]);
+                    ComboFlyObj.Create(ps);
+
                 }
 
                 iscombo = iscombo | c;

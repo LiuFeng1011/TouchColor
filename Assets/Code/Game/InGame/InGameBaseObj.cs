@@ -14,7 +14,7 @@ public class InGameBaseObj : MSBaseObject {
 
     protected Material m;
 
-    float colorAction = 0f,colorMaxAction = 0.5f;
+    float colorAction = 0f,colorMaxAction = 0.25f;
     Color targetColor = Color.white,lastColor = Color.white;
 
     bool isdie = false;
@@ -51,7 +51,6 @@ public class InGameBaseObj : MSBaseObject {
             if(state == GameObjState.black) targetColor = new Color(0,0,0);
             else targetColor = new Color(1, 1, 1);
             colorAction = colorMaxAction;
-            Debug.Log(targetColor);
         }
     }
 }

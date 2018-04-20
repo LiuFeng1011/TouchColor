@@ -9,7 +9,7 @@ public class InGameColorManager : BaseGameObject {
     public void Init(){
         rand = Random.Range(0f,3.14f);
         targetRand = rand;
-        SetColor(rand);
+        SetColor();
         //GameObject bg = GameObject.Find("bg");
         //if (bg == null) return;
         //ParticleSystem particle = bg.GetComponent<ParticleSystem>();

@@ -67,6 +67,14 @@ public class InGameLevelManager : BaseGameObject {
     {
         addList.Add(obj);
     }
+
+    public void ClearObj(){
+        for (int i = 0; i < objList.Count; i++)
+        {
+            objList[i].SetDie();
+        }
+    }
+
     public void Destroy(){
         if (inGameCreateObjManager != null)inGameCreateObjManager.Destroy();
         if (inGameStoryMapManager != null) inGameStoryMapManager.OnDestroy();

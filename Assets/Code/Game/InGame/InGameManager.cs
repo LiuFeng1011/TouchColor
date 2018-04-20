@@ -26,7 +26,7 @@ public class InGameManager : MonoBehaviour {
     public MapData md = new MapData();
 
 
-    enGameState gameState;
+    public enGameState gameState;
 
     public static float gameTime = 0f;
 
@@ -189,6 +189,8 @@ public class InGameManager : MonoBehaviour {
         rapidBlurEffectManager.OverBlur();
         role.Revive();
         modelManager.Revive();
+
+        inGameLevelManager.ClearObj();
     }
 
     public void Restart(){
